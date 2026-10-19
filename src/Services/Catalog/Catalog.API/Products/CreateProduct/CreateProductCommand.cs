@@ -1,5 +1,7 @@
 ﻿
 
+using BuildingBlocks.CQRS;
+
 namespace Catalog.API.Products.CreateProduct;
 
 
@@ -11,4 +13,4 @@ public sealed record CreateProductCommand(
     List<string> Category,
     string Description,
     string ImageFile,
-    decimal Price );
+    decimal Price ): ICommand<CreateProductResult>;

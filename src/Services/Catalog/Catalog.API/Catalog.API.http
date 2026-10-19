@@ -1,6 +1,13 @@
-@Catalog.API_HostAddress = http://localhost:5178
+@baseURL = https://localhost:5050
 
-GET {{Catalog.API_HostAddress}}/weatherforecast/
-Accept: application/json
+POST {{baseURL}}/products
+Content-Type: application/json
 
-###
+{
+    "name":"cola",
+    "category":["Sweets"],
+    "description":"sweet liquid",
+    "imageFile":"no image",
+    "price":5
+}
+
