@@ -1,10 +1,11 @@
 ﻿
 using BuildingBlocks.CQRS;
 using Catalog.API.Entities;
+using Marten;
 
 namespace Catalog.API.Products.CreateProduct;
 
-public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand,CreateProductResult>
+public class CreateProductCommandHandler(IDocumentSession session) : ICommandHandler<CreateProductCommand,CreateProductResult>
 {
     public async Task<CreateProductResult> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
@@ -17,8 +18,10 @@ public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand,
             Description = request.Description
         };
         
-        // add and save to database 
 
+        session.Store(prod);
+        await session.SaveChangesAsync(cancellationToken);
+        
         return new CreateProductResult(prod.Id);
     }
 }

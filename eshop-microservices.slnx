@@ -6,4 +6,7 @@
   <Folder Name="/Services/Catalog/">
     <Project Path="src/Services/Catalog/Catalog.API/Catalog.API.csproj" />
   </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="compose.yaml" />
+  </Folder>
 </Solution>
