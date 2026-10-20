@@ -1,10 +1,10 @@
-@baseURL = http://localhost:8080
+@baseURL = https://localhost:5050
 
 POST {{baseURL}}/products
 Content-Type: application/json
 
 {
-    "name":"cola",
+    "name":"juice",
     "category":["Sweets"],
     "description":"sweet liquid",
     "imageFile":"no image",
