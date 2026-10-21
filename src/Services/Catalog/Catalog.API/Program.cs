@@ -1,5 +1,10 @@
 using Carter;
 using Catalog.API.Products.CreateProduct;
+using Catalog.API.Products.DeleteProduct;
+using Catalog.API.Products.GetProductByCategory;
+using Catalog.API.Products.GetProductById;
+using Catalog.API.Products.GetProducts;
+using Catalog.API.Products.UpdateProduct;
 using JasperFx;
 using Marten;
 
@@ -17,8 +22,16 @@ builder.Services.AddMediatR(options =>
     options.RegisterServicesFromAssembly(typeof(Program).Assembly);
 });
 builder.Services.AddOpenApi();
-builder.Services.AddCarter(null,configurator =>
-    configurator.WithModule<CreateProductEndpoint>());
+builder.Services.AddCarter(null, configurator =>
+{
+    configurator.WithModule<CreateProductEndpoint>();
+    configurator.WithModule<GetProductsEndpoint>();
+    configurator.WithModule<GetProductByIdEndpoint>();
+    configurator.WithModule<GetProductsByCategoryEndpoint>();
+    configurator.WithModule<UpdateProductEndpoint>();
+    configurator.WithModule<DeleteProductEndpoint>();
+
+});
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

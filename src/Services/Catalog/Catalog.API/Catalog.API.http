@@ -1,5 +1,6 @@
 @baseURL = https://localhost:5050
 
+###
 POST {{baseURL}}/products
 Content-Type: application/json
 
@@ -11,3 +12,14 @@ Content-Type: application/json
     "price":5
 }
 
+###
+GET {{baseURL}}/products
+Accept: application/json
+
+###
+GET {{baseURL}}/products/cddabb84-7a35-42b0-83be-e291f0c39a10
+Accept:
+
+###
+GET {{baseURL}}/products/category/Sweets
+Accept: application/json

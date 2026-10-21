@@ -22,10 +22,10 @@
       context: .
       dockerfile: src/Services/Catalog/Catalog.API/Dockerfile
     environment:
-      ASPNETCORE_HTTP_PORTS: 8080
+      ASPNETCORE_HTTP_PORTS: 5000
       ConnectionStrings__Database: "Host=catalogDb;Port=5432;Database=CatalogDb;Username=${CATALOG_DB_USER:-postgres};Password=${CATALOG_DB_PASSWORD:-postgres};Include Error Detail=true"
     ports:
-      - "8080:8080"
+      - "5000:5000"
     depends_on:
       catalogDb:
         condition: service_healthy
