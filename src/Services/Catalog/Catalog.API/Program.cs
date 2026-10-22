@@ -1,3 +1,4 @@
+using BuildingBlocks.Behaviors;
 using Carter;
 using Catalog.API.Products.CreateProduct;
 using Catalog.API.Products.DeleteProduct;
@@ -5,6 +6,7 @@ using Catalog.API.Products.GetProductByCategory;
 using Catalog.API.Products.GetProductById;
 using Catalog.API.Products.GetProducts;
 using Catalog.API.Products.UpdateProduct;
+using FluentValidation;
 using JasperFx;
 using Marten;
 
@@ -16,11 +18,14 @@ builder.Services.AddMarten(cfg =>
     cfg.AutoCreateSchemaObjects=AutoCreate.CreateOrUpdate;
 }).UseLightweightSessions();
 
-
 builder.Services.AddMediatR(options =>
 {
     options.RegisterServicesFromAssembly(typeof(Program).Assembly);
+    options.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
+
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+
 builder.Services.AddOpenApi();
 builder.Services.AddCarter(null, configurator =>
 {

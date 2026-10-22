@@ -6,7 +6,7 @@ using MediatR;
 namespace Catalog.API.Products.CreateProduct;
 
 
-public sealed record CreateProductRequest(string Name , List<string> Category , string Description, string ImageFile);
+public sealed record CreateProductRequest(string Name , List<string> Category , string Description, string ImageFile,decimal Price);
 public sealed record CreateProductResponse(Guid Id);
 
 

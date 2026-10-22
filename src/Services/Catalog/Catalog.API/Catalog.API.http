@@ -5,7 +5,7 @@ POST {{baseURL}}/products
 Content-Type: application/json
 
 {
-    "name":"juice",
+    "name":"cola",
     "category":["Sweets"],
     "description":"sweet liquid",
     "imageFile":"no image",
