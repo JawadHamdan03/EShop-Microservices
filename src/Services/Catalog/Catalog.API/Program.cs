@@ -1,4 +1,5 @@
 using BuildingBlocks.Behaviors;
+using BuildingBlocks.Exceptions.Handler;
 using Carter;
 using Catalog.API.Products.CreateProduct;
 using Catalog.API.Products.DeleteProduct;
@@ -9,6 +10,7 @@ using Catalog.API.Products.UpdateProduct;
 using FluentValidation;
 using JasperFx;
 using Marten;
+using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +39,23 @@ builder.Services.AddCarter(null, configurator =>
     configurator.WithModule<DeleteProductEndpoint>();
 
 });
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails(options =>
+{
+    options.CustomizeProblemDetails = context =>
+    {
+        context.ProblemDetails.Instance =
+            $"{context.HttpContext.Request.Method} {context.HttpContext.Request.Path}";
+
+        context.ProblemDetails.Extensions.TryAdd("requestId",context.HttpContext.TraceIdentifier);
+        var activity = context.HttpContext.Features.Get<IHttpActivityFeature>()?.Activity;
+        context.ProblemDetails.Extensions.TryAdd("traceId",activity?.Id);
+    };
+});
+
+
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -46,5 +65,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.MapCarter();
+app.UseExceptionHandler();
+
 
 app.Run();
