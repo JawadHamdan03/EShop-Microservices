@@ -14,7 +14,6 @@ public class GetProductByIdQueryHandler(IDocumentSession session,ILogger<GetProd
 {
     public async Task<GetProductByIdQueryResult> Handle(GetProductByIdQuery query, CancellationToken cancellationToken)
     {
-        logger.LogInformation("GetProductByIdQueryHandler.Handler called with{@Query}",query);
         var prod = await session.LoadAsync<Product>(query.Id,cancellationToken);
 
         if (prod is null)

@@ -9,7 +9,6 @@ public class GetProductsQueryHandler(IDocumentSession session, ILogger<GetProduc
 {
     public async Task<GetProductsResult> Handle(GetProdcutsQuery query, CancellationToken cancellationToken)
     {
-        logger.LogInformation("GetProductQueryHandler.Handle was called with {@Query}",query);
         
         var res =  await session.Query<Product>().ToListAsync(cancellationToken);
         
