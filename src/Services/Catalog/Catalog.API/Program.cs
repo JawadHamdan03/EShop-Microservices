@@ -9,8 +9,10 @@ using Catalog.API.Products.GetProductById;
 using Catalog.API.Products.GetProducts;
 using Catalog.API.Products.UpdateProduct;
 using FluentValidation;
+using HealthChecks.UI.Client;
 using JasperFx;
 using Marten;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -60,7 +62,7 @@ builder.Services.AddProblemDetails(options =>
         context.ProblemDetails.Extensions.TryAdd("traceId",activity?.Id);
     };
 });
-
+builder.Services.AddHealthChecks().AddNpgSql(builder.Configuration.GetConnectionString("database")!);
 
 
 var app = builder.Build();
@@ -74,5 +76,11 @@ app.UseHttpsRedirection();
 app.MapCarter();
 app.UseExceptionHandler();
 
+app.UseHealthChecks("/health",
+    new HealthCheckOptions()
+    {
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    }
+    );
 
 app.Run();
