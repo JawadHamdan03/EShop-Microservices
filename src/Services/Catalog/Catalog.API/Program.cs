@@ -1,6 +1,7 @@
 using BuildingBlocks.Behaviors;
 using BuildingBlocks.Exceptions.Handler;
 using Carter;
+using Catalog.API.Data;
 using Catalog.API.Products.CreateProduct;
 using Catalog.API.Products.DeleteProduct;
 using Catalog.API.Products.GetProductByCategory;
@@ -19,6 +20,11 @@ builder.Services.AddMarten(cfg =>
     cfg.Connection(builder.Configuration.GetConnectionString("Database")!);
     cfg.AutoCreateSchemaObjects=AutoCreate.CreateOrUpdate;
 }).UseLightweightSessions();
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.InitializeMartenWith<CatalogInitialData>();
+}
 
 builder.Services.AddMediatR(options =>
 {

@@ -8,13 +8,15 @@ namespace Catalog.API.Products.GetProducts;
 public class GetProductsEndpoint : ICarterModule
 {
     public sealed record GetProductResponse(IEnumerable<Product> Products);
+    public sealed record GetProductRequest(int? PageNumber=1 , int? PageSzie =10);
 
     
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("/products",async (ISender sender) =>
-        {
-            var res = await sender.Send(new GetProdcutsQuery());
+        app.MapGet("/products",async ([AsParameters]GetProductRequest request,ISender sender) =>
+            { 
+            var query = request.Adapt<GetProdcutsQuery>();
+            var res = await sender.Send(query);
             var response = res.Adapt<GetProductResponse>();
             return Results.Ok(res);
         }).WithName("Get Products")
