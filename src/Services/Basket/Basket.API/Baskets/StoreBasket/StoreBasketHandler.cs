@@ -1,19 +1,21 @@
-﻿using Basket.API.Entities;
+﻿using Basket.API.Data;
+using Basket.API.Entities;
 using BuildingBlocks.CQRS;
 using FluentValidation;
 
 namespace Basket.API.Baskets.StoreBasket;
 
 
-public sealed record StoreBasketResult(string username);
+public sealed record StoreBasketResult(string UserName);
 
 public sealed record StoreBasketCommand(ShoppingCart ShoppingCart):ICommand<StoreBasketResult>;
 
-public class StoreBasketHandler : ICommandHandler<StoreBasketCommand,StoreBasketResult>
+public class StoreBasketHandler(IBasketRepository basketRepository) : ICommandHandler<StoreBasketCommand,StoreBasketResult>
 {
-    public Task<StoreBasketResult> Handle(StoreBasketCommand request, CancellationToken cancellationToken)
+    public async Task<StoreBasketResult> Handle(StoreBasketCommand request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+       var res = await basketRepository.StoreBasket(request.ShoppingCart,cancellationToken);
+       return new StoreBasketResult(request.ShoppingCart.UserName);
     }
 }
 

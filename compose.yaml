@@ -15,6 +15,22 @@
       interval: 5s
       timeout: 5s
       retries: 5
+      
+  basketDb:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: BasketDb
+      POSTGRES_USER: ${BASKET_DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${BASKET_DB_PASSWORD:-postgres}
+    ports:
+      - "5433:5432"
+    volumes:
+      - basketdb_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${BASKET_DB_USER:-postgres} -d BasketDb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   catalog.api:
     image: catalog.api
@@ -29,6 +45,21 @@
     depends_on:
       catalogDb:
         condition: service_healthy
+  
+  basket.api:
+    image: basket.api
+    build:
+      context: .
+      dockerfile: src/Services/Basket/Basket.API/Dockerfile
+    environment:
+      ASPNETCORE_HTTP_PORTS: 5050
+      ConnectionStrings__Database: "Host=basketDb;Port=5432;Database=BasketDb;Username=${BASKET_DB_USER:-postgres};Password=${BASKET_DB_PASSWORD:-postgres};Include Error Detail=true"
+    ports:
+      - "5050:5050"
+    depends_on:
+      basketDb:
+        condition: service_healthy
 
 volumes:
   catalogdb_data:
+  basketdb_data:

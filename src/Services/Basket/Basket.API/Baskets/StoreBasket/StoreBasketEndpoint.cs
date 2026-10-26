@@ -6,8 +6,8 @@ using MediatR;
 namespace Basket.API.Baskets.StoreBasket;
 
 
-public sealed record StoreBasketRequest(ShoppingCart ShoppingCart);
-public sealed record StoreBasketResponse(string username);
+public sealed record StoreBasketRequest(ShoppingCart Cart);
+public sealed record StoreBasketResponse(string UserName);
 
 
 public class StoreBasketEndpoint : ICarterModule
@@ -16,10 +16,10 @@ public class StoreBasketEndpoint : ICarterModule
     {
         app.MapPost("/basket",async (StoreBasketRequest request, ISender sender) =>
         {
-            var res = await sender.Send(new StoreBasketCommand(request.ShoppingCart));
+            var res = await sender.Send(new StoreBasketCommand(request.Cart));
 
             var response =res.Adapt<StoreBasketResponse>();
-            return Results.Created($"/basket/{response.username}",response);
+            return Results.Created($"/basket/{response.UserName}",response);
         });
     }
 }
