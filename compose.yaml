@@ -53,7 +53,8 @@
     depends_on:
       catalogDb:
         condition: service_healthy
-  
+      distributedcache:
+        condition: service_healthy
   basket.api:
     image: basket.api
     build:
