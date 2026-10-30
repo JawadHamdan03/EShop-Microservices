@@ -19,6 +19,8 @@
 
     <ItemGroup>
       <PackageReference Include="Marten" Version="9.54.1" />
+      <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="10.0.14" />
+      <PackageReference Include="Scrutor" Version="7.0.0" />
     </ItemGroup>
 
 </Project>
