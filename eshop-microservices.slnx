@@ -2,7 +2,9 @@
   <Folder Name="/BuildingBlocks/">
     <Project Path="src/BuildingBlocks/BuildingBlocks/BuildingBlocks.csproj" />
   </Folder>
-  <Folder Name="/Services/" />
+  <Folder Name="/Services/">
+    <Project Path="src/Services/Discount/Discount.Grpc/Discount.Grpc.csproj" />
+  </Folder>
   <Folder Name="/Services/Basket/">
     <Project Path="src/Services/Basket/Basket.API/Basket.API.csproj" />
   </Folder>
