@@ -38,6 +38,11 @@
     restart: always
     ports:
       - "6379:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
     
   
   catalog.api:
@@ -46,30 +51,50 @@
       context: .
       dockerfile: src/Services/Catalog/Catalog.API/Dockerfile
     environment:
-      ASPNETCORE_HTTP_PORTS: 5000
+      ASPNETCORE_HTTP_PORTS: 5050
       ConnectionStrings__Database: "Host=catalogDb;Port=5432;Database=CatalogDb;Username=${CATALOG_DB_USER:-postgres};Password=${CATALOG_DB_PASSWORD:-postgres};Include Error Detail=true"
     ports:
-      - "5000:5000"
+      - "5050:5050"
     depends_on:
       catalogDb:
         condition: service_healthy
-      distributedcache:
-        condition: service_healthy
+     
   basket.api:
     image: basket.api
     build:
       context: .
       dockerfile: src/Services/Basket/Basket.API/Dockerfile
     environment:
-      ASPNETCORE_HTTP_PORTS: 5050
+      ASPNETCORE_HTTP_PORTS: 5051
       ConnectionStrings__Database: "Host=basketDb;Port=5432;Database=BasketDb;Username=${BASKET_DB_USER:-postgres};Password=${BASKET_DB_PASSWORD:-postgres};Include Error Detail=true"
       ConnectionStrings__Redis: "distributedcache:6379"
+      GrpcSettings__DiscountUrl: "http://host.docker.internal:5052"
     ports:
-      - "5050:5050"
+      - "5051:5051"
     depends_on:
       basketDb:
         condition: service_healthy
+      distributedcache:
+        condition: service_healthy
+      discount.grpc:
+        condition: service_started
+      
+  discount.grpc:
+    image: discount.grpc
+    build:
+      context: .
+      dockerfile: src/Services/Discount/Discount.Grpc/Dockerfile
+    environment:
+      ASPNETCORE_HTTP_PORTS: 5052
+      ConnectionStrings__Database: "Data Source=discountdb"
+    ports:
+      - "5052:5052"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+
 
 volumes:
   catalogdb_data:
-  basketdb_data:
+  basketdb_data:  
