@@ -12,6 +12,12 @@
   <Folder Name="/Services/Discount/">
     <Project Path="src/Services/Discount/Discount.Grpc/Discount.Grpc.csproj" />
   </Folder>
+  <Folder Name="/Services/Ordering/">
+    <Project Path="Ordering.Infrastructure/Ordering.Infrastructure.csproj" />
+    <Project Path="src/Services/Ordering/Ordering.API/Ordering.API.csproj" />
+    <Project Path="src/Services/Ordering/Ordering.Application/Ordering.Application.csproj" />
+    <Project Path="src/Services/Ordering/Ordering.Domain/Ordering.Domain.csproj" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path="compose.yaml" />
   </Folder>
